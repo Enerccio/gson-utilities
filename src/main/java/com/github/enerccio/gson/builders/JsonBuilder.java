@@ -72,12 +72,12 @@ public class JsonBuilder extends BaseBuilder {
 	}
 
 	@Override
-	public void setCurrentLevelElement(JsonElement e) {
+	protected void setCurrentLevelElement(JsonElement e) {
 		root = e;
 	}
 
 	@Override
-	public JsonElement getCurrentLevelElement() {
+	protected JsonElement getCurrentLevelElement() {
 		return root;
 	}
 
