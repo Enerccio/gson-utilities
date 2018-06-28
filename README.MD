@@ -1,14 +1,33 @@
-# GSon Utilities
+# Gson Utilities
 
 Collection of utility classes to be used with google gson.
-
 These utilites are licensed under MIT license. 
 
-## JsonBuilder
+[![Build Status](https://travis-ci.org/Enerccio/gson-utilities.svg?branch=master)](https://travis-ci.org/Enerccio/gson-utilities)[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.enerccio/gson-utilities/badge.png)](https://maven-badges.herokuapp.com/maven-central/com.github.enerccio/gson-utilities)[![Javadocs](http://www.javadoc.io/badge/com.github.enerccio/gson-utilities.png?color=red)](http://www.javadoc.io/doc/com.github.enerccio/gson-utilities)
+
+## Using gson-utilities
+
+To use this library, simply add this to your maven dependencies:
+
+```xml
+<dependency>
+  <groupId>com.github.enerccio</groupId>
+  <artifactId>gson-utilities</artifactId>
+  <version>1.0.0</version>
+</dependency>
+```
+
+## Manual install
+
+Clone the repository and run `mvn package`. 
+
+## List of utilities
+
+### JsonBuilder
 
 This utility builder provides a way to create json strings/values structurally but still using google gson as backing serializer.
 
-### Examples
+#### Examples
 
 ```java
 String value = new JsonBuilder()
