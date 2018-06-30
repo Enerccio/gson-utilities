@@ -64,12 +64,12 @@ class ArrayBuilder extends BaseBuilder {
 	@Override
 	public ValueBuilder object(IObjectBuilder builder) {
 		builder.build(new ObjectFacade(this));
-		return prevLevel;
+		return this;
 	}
 
 	@Override
 	public ValueBuilder array(IArrayBuilder builder) {
 		builder.build(new ArrayFacade(this));
-		return prevLevel;
+		return this;
 	}
 }
