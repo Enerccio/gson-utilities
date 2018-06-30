@@ -1,5 +1,7 @@
 package com.github.enerccio.gson.builders;
 
+import com.github.enerccio.gson.builders.functional.IArrayBuilder;
+import com.github.enerccio.gson.builders.functional.IObjectBuilder;
 import com.google.gson.JsonElement;
 
 /**
@@ -120,5 +122,23 @@ public interface ValueBuilder {
 	 *        inconsisted state
 	 */
 	JsonElement toJsonTree();
+	
+	/**
+	 * Creates object via calling the provider
+	 * 
+	 * @return self
+	 * @throws {@link IllegalStateException} when creating object is not possible
+	 * @since 1.1.0
+	 */
+	ValueBuilder object(IObjectBuilder builder);
+	
+	/**
+	 * Creates array via calling the provider
+	 * 
+	 * @return self
+	 * @throws {@link IllegalStateException} when creating array is not possible
+	 * @since 1.1.0
+	 */
+	ValueBuilder array(IArrayBuilder builder);
 
 }

@@ -1,8 +1,10 @@
 package com.github.enerccio.gson.builders;
 
+import com.github.enerccio.gson.builders.functional.IArrayBuilder;
+import com.github.enerccio.gson.builders.functional.IObjectBuilder;
 import com.google.gson.JsonElement;
 
-class BaseBuilder implements ValueBuilder {
+class BaseBuilder extends PreviousLevelAccessor implements ValueBuilder {
 
 	/**
 	 * previous builder in hierarchy
@@ -10,6 +12,7 @@ class BaseBuilder implements ValueBuilder {
 	protected BaseBuilder prevLevel;
 
 	BaseBuilder(BaseBuilder valueBuilder) {
+		super(valueBuilder);
 		prevLevel = valueBuilder;
 	}
 
@@ -17,24 +20,6 @@ class BaseBuilder implements ValueBuilder {
 		if (prevLevel instanceof ObjectPropertyBuilder)
 			return prevLevel.end();
 		return prevLevel;
-	}
-
-	/**
-	 * Sets the json element of this level to e.
-	 * @param e
-	 * @throws {@link IllegalStateException} when this builder does not support setting elements
-	 */
-	protected void setCurrentLevelElement(JsonElement e) {
-		throw new IllegalStateException();
-	}
-
-	/**
-	 * Returns element that belongs to this builder.
-	 * @return element
-	 * @throws {@link IllegalStateException} when this builder does not have any element
-	 */
-	protected JsonElement getCurrentLevelElement() {
-		throw new IllegalStateException();
 	}
 
 	public ValueBuilder object() {
@@ -74,6 +59,14 @@ class BaseBuilder implements ValueBuilder {
 	}
 
 	public ValueBuilder nil() {
+		throw new IllegalStateException();
+	}
+
+	public ValueBuilder object(IObjectBuilder builder) {
+		throw new IllegalStateException();
+	}
+
+	public ValueBuilder array(IArrayBuilder builder) {
 		throw new IllegalStateException();
 	}
 }

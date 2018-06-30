@@ -1,5 +1,7 @@
 package com.github.enerccio.gson.builders;
 
+import com.github.enerccio.gson.builders.functional.IArrayBuilder;
+import com.github.enerccio.gson.builders.functional.IObjectBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -122,4 +124,15 @@ public class JsonBuilder extends BaseBuilder {
 		return this;
 	}
 
+	@Override
+	public ValueBuilder object(IObjectBuilder builder) {
+		builder.build(new ObjectFacade(this));
+		return this;
+	}
+
+	@Override
+	public ValueBuilder array(IArrayBuilder builder) {
+		builder.build(new ArrayFacade(this));
+		return this;
+	}
 }

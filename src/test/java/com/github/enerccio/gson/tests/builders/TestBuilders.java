@@ -1,6 +1,10 @@
 package com.github.enerccio.gson.tests.builders;
 
 import com.github.enerccio.gson.builders.JsonBuilder;
+import com.github.enerccio.gson.builders.functional.IArrayBuilder;
+import com.github.enerccio.gson.builders.functional.IArrayFacade;
+import com.github.enerccio.gson.builders.functional.IObjectBuilder;
+import com.github.enerccio.gson.builders.functional.IObjectFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
@@ -381,5 +385,149 @@ public class TestBuilders extends TestCase {
 		// @formatter:on
 
 		Assert.assertEquals(value, gson.toJson(value2));
+	}
+	
+	public void testJsonBuildersFunctional() {
+		// sync jsons for both generations
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		String value1, value2;
+		
+		// @formatter:off
+		value1 = new JsonBuilder()
+			.setGson(gson)
+			.object()
+				.property("foo").string("bar")
+			.end()
+			.toJson();
+		// @formatter:on
+		
+		// @formatter:off
+		value2 = new JsonBuilder()
+			.setGson(gson)
+			.object(new IObjectBuilder() {
+				
+				public void build(IObjectFacade object) {
+					object.put("foo", "bar");
+				}
+			})
+			.toJson();
+		// @formatter:on
+		
+		Assert.assertEquals(value1, value2);
+		
+		// @formatter:off
+		value1 = new JsonBuilder()
+			.setGson(gson)
+			.array()
+				.string("foo")
+				.string("bar")
+			.end()
+			.toJson();
+		// @formatter:on
+		
+		// @formatter:off
+		value2 = new JsonBuilder()
+			.setGson(gson)
+			.array(new IArrayBuilder() {
+				
+				public void build(IArrayFacade array) {
+					array.add("foo");
+					array.add("bar");
+				}
+			})
+			.toJson();
+		// @formatter:on
+		
+		Assert.assertEquals(value1, value2);
+		
+		// @formatter:off
+		value1 = new JsonBuilder()
+			.setGson(gson)
+			.array()
+				.object()
+					.property("foo").array()
+						.string("bar")
+					.end()
+				.end()
+			.end()
+			.toJson();
+		// @formatter:on
+		
+		// @formatter:off
+		value2 = new JsonBuilder()
+			.setGson(gson)
+			.array(new IArrayBuilder() {
+				
+				public void build(IArrayFacade array) {
+					array.addObject(new IObjectBuilder() {
+						
+						public void build(IObjectFacade object) {
+							object.putArray("foo", new IArrayBuilder() {
+								
+								public void build(IArrayFacade array) {
+									array.add("bar");
+								}
+							});
+						}
+					});
+				}
+			})
+			.toJson();
+		// @formatter:on
+		
+		Assert.assertEquals(value1, value2);
+		
+		// @formatter:off
+		value1 = new JsonBuilder(gson)
+			.object()
+				.property("texts").array()
+					.string("Welcome to the hotel")
+					.string("User %s!")
+				.end()
+				.property("singleton").bool(true)
+				.property("configuration").object()
+					.property("ip").string("127.0.0.1")
+					.property("port").number(1234)
+					.property("user").string("johnWick")
+					.property("password").string("doggo")
+					.property("isAdmin").bool(true)
+					.property("maxResponseTimeSeconds").number(1.5)
+				.end()
+			.end()
+			.toJson();
+		// @formatter:on
+		
+		// @formatter:off
+		value2 = new JsonBuilder()
+			.setGson(gson)
+			.object(new IObjectBuilder() {
+				
+				public void build(IObjectFacade root) {
+					root.putArray("texts", new IArrayBuilder() {
+						
+						public void build(IArrayFacade texts) {
+							texts.add("Welcome to the hotel");
+							texts.add("User %s!");
+						}
+					});
+					root.put("singleton", true);
+					root.putObject("configuration", new IObjectBuilder() {
+						
+						public void build(IObjectFacade configuration) {
+							configuration.put("ip", "127.0.0.1");
+							configuration.put("port", 1234);
+							configuration.put("user", "johnWick");
+							configuration.put("password", "doggo");
+							configuration.put("isAdmin", true);
+							configuration.put("maxResponseTimeSeconds", 1.5);
+						}
+					});
+				}
+			})
+			.toJson();
+		// @formatter:on
+		
+		Assert.assertEquals(value1, value2);
 	}
 }

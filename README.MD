@@ -29,6 +29,10 @@ This utility builder provides a way to create json strings/values structurally b
 
 #### Examples
 
+##### Standard JSON builder
+
+This is standard Java builder implementation that uses methods to create values.
+
 ```java
 String value = new JsonBuilder()
 				.object()
@@ -50,6 +54,82 @@ String value = new JsonBuilder()
 ```
 
 value will contain: 
+
+```json
+{
+  "texts": [
+    "Welcome to the hotel",
+    "User %s!"
+  ],
+  "singleton": true,
+  "configuration": {
+    "ip": "127.0.0.1",
+    "port": 1234,
+    "user": "johnWick",
+    "password": "doggo",
+    "isAdmin": true,
+    "maxResponseTimeSeconds": 1.5
+  }
+}
+```
+
+##### Functional JSON builder
+
+You can use functional interface builders for objects/arrays in JsonBuilder.
+
+###### Java <1.8
+```java
+String value = new JsonBuilder()
+			.setGson(gson)
+			.object(new IObjectBuilder() {
+				
+				public void build(IObjectFacade root) {
+					root.putArray("texts", new IArrayBuilder() {
+						
+						public void build(IArrayFacade texts) {
+							texts.add("Welcome to the hotel");
+							texts.add("User %s!");
+						}
+					});
+					root.put("singleton", true);
+					root.putObject("configuration", new IObjectBuilder() {
+						
+						public void build(IObjectFacade configuration) {
+							configuration.put("ip", "127.0.0.1");
+							configuration.put("port", 1234);
+							configuration.put("user", "johnWick");
+							configuration.put("password", "doggo");
+							configuration.put("isAdmin", true);
+							configuration.put("maxResponseTimeSeconds", 1.5);
+						}
+					});
+				}
+			})
+			.toJson();
+```
+
+###### Java >=1.8
+```java
+String value = new JsonBuilder()
+			.object(root -> {
+					root.putArray("texts", texts -> {
+						texts.add("Welcome to the hotel");
+						texts.add("User %s!");
+					});
+					root.put("singleton", true);
+					root.putObject("configuration", configuration -> {
+						configuration.put("ip", "127.0.0.1");
+						configuration.put("port", 1234);
+						configuration.put("user", "johnWick");
+						configuration.put("password", "doggo");
+						configuration.put("isAdmin", true);
+						configuration.put("maxResponseTimeSeconds", 1.5);
+					});
+				})
+			.toJson();
+```
+ 
+In both cases the value will be:
 
 ```json
 {

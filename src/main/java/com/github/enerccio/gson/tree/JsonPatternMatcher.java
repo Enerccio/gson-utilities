@@ -38,6 +38,7 @@ import com.github.enerccio.gson.tree.TreeInfo.TreeInfoType;
  * Both treeany and any will match empty trees. \ to escape syntax elements
  * 
  * @author pvan
+ * @since 1.1.0
  */
 public class JsonPatternMatcher {
 	
@@ -131,12 +132,6 @@ public class JsonPatternMatcher {
 			}
 			return MatchResult.MATCHED;
 		}
-		
-	}
-	
-	private static class PatternMatchState {
-		
-		private int matchPos = 0;
 		
 	}
 	
@@ -319,23 +314,21 @@ public class JsonPatternMatcher {
 	 * 
 	 * @param path list of {@link TreeInfo} path elements
 	 * @return whether this matcher matches or not
+	 * @since 1.1.0
 	 */
 	public boolean matches(List<TreeInfo> path) {
-		return matches(path, new PatternMatchState());
-	}
-
-	private boolean matches(List<TreeInfo> path, PatternMatchState patternMatchState) {
+		int matchPos = 0;
 		for (TreeInfo nfo : path) {
-			if (patternMatchState.matchPos >= compiledPattern.size()) {
+			if (matchPos >= compiledPattern.size()) {
 				return true; // no more tests == matches
 			}
-			MatchTreeElement e = compiledPattern.get(patternMatchState.matchPos);
+			MatchTreeElement e = compiledPattern.get(matchPos);
 			
 			switch (e.match(nfo)) {
 			case MATCHED_MOVE:
-				++patternMatchState.matchPos;
+				++matchPos;
 			case MATCHED:
-				++patternMatchState.matchPos;
+				++matchPos;
 				break;
 			case MATCHED_STAY:
 				break;
@@ -345,6 +338,6 @@ public class JsonPatternMatcher {
 				break;
 			}
 		}
-		return patternMatchState.matchPos >= compiledPattern.size();
+		return matchPos >= compiledPattern.size();
 	}
 }
