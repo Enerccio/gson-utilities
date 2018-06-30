@@ -8,7 +8,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-public class ObjectFacade extends PreviousLevelAccessor implements IObjectFacade {
+class ObjectFacade extends PreviousLevelAccessor implements IObjectFacade {
 	
 	private JsonObject object;
 

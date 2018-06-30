@@ -12,29 +12,27 @@ import com.github.enerccio.gson.tree.TreeInfo.TreeInfoType;
 /**
  * Constructs matcher for tree pattern.
  * This class is thread safe.
- * 
- * <pre>
- * 	Pattern is parsed with this grammar:
- *  <p>
+ * </br></br>
+ * Pattern is parsed with this grammar:
+ * </br></br>
  * 	path = path_content (path_separator path_element+)? 
- *  <p>
+ * </br>
  *  path_separator = "."
- *  <p>
+ * </br>
  *  path_element = path_separator path_content
- *  <p>
+ * </br>
  *  path_content = property | index | treeany | any
- *  <p>
+ * </br>
  *  treeany = "**"
- *  <p>
+ * </br>
  *  any = "*"
- *  <p>
+ * </br>
  *  index = "@" number
- *  <p>
+ * </br>
  *  property = string
- * </pre>
- * 
- * Example pattern: "/prop1/@3/*\/qux/**\/foo" will match this path: prop1/@3/qux/a/@2/foo
- * 
+ * </br></br>
+ * Example pattern: "prop1.@3.*.qux.**.foo" will match this path: prop1.@3.qux.a.@2.foo
+ * </br>
  * Both treeany and any will match empty trees. \ to escape syntax elements
  * 
  * @author pvan

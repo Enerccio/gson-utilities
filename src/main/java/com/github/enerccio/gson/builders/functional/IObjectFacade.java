@@ -33,7 +33,7 @@ public interface IObjectFacade {
 	public void put(String property, Boolean bool);
 	
 	/**
-	 * Sets this property to this string
+	 * Sets this property to null
 	 * @param property
 	 * @since 1.1.0
 	 */
