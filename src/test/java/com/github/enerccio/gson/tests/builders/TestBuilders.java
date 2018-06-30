@@ -529,5 +529,60 @@ public class TestBuilders extends TestCase {
 		// @formatter:on
 		
 		Assert.assertEquals(value1, value2);
+		
+		// @formatter:off
+		value1 = new JsonBuilder()
+			.setGson(gson)
+			.object()
+				.property("foo").object()
+					.property("bar").number(1)
+				.end()
+			.end()
+			.toJson();
+		// @formatter:on
+		
+		// @formatter:off
+		value2 = new JsonBuilder()
+			.setGson(gson)
+			.object()
+				.property("foo").object(new IObjectBuilder() {
+					
+					public void build(IObjectFacade object) {
+						object.put("bar", 1);
+					}
+					
+				})
+			.end()
+			.toJson();
+		// @formatter:on
+		
+		Assert.assertEquals(value1, value2);
+		
+		// @formatter:off
+		value1 = new JsonBuilder()
+			.setGson(gson)
+			.array()
+				.array()
+					.number(1)
+				.end()
+			.end()
+			.toJson();
+		// @formatter:on
+		
+		// @formatter:off
+		value2 = new JsonBuilder()
+			.setGson(gson)
+			.array()
+				.array(new IArrayBuilder() {
+					
+					public void build(IArrayFacade array) {
+						array.add(1);
+					}
+				})
+			.end()
+			.toJson();
+		// @formatter:on
+		
+		Assert.assertEquals(value1, value2);
 	}
 }

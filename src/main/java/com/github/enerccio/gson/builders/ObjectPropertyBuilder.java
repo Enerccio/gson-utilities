@@ -1,5 +1,7 @@
 package com.github.enerccio.gson.builders;
 
+import com.github.enerccio.gson.builders.functional.IArrayBuilder;
+import com.github.enerccio.gson.builders.functional.IObjectBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
@@ -51,6 +53,18 @@ class ObjectPropertyBuilder extends BaseBuilder {
 
 	public ValueBuilder nil() {
 		setCurrentLevelElement(JsonNull.INSTANCE);
+		return prevLevel;
+	}
+	
+	@Override
+	public ValueBuilder object(IObjectBuilder builder) {
+		builder.build(new ObjectFacade(this));
+		return prevLevel;
+	}
+
+	@Override
+	public ValueBuilder array(IArrayBuilder builder) {
+		builder.build(new ArrayFacade(this));
 		return prevLevel;
 	}
 
