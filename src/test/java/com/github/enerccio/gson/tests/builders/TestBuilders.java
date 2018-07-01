@@ -7,7 +7,10 @@ import com.github.enerccio.gson.builders.functional.IObjectBuilder;
 import com.github.enerccio.gson.builders.functional.IObjectFacade;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 
 import junit.framework.Assert;
 import junit.framework.Test;
@@ -386,13 +389,13 @@ public class TestBuilders extends TestCase {
 
 		Assert.assertEquals(value, gson.toJson(value2));
 	}
-	
+
 	public void testJsonBuildersFunctional() {
 		// sync jsons for both generations
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
-		
+
 		String value1, value2;
-		
+
 		// @formatter:off
 		value1 = new JsonBuilder()
 			.setGson(gson)
@@ -401,21 +404,22 @@ public class TestBuilders extends TestCase {
 			.end()
 			.toJson();
 		// @formatter:on
-		
+
 		// @formatter:off
 		value2 = new JsonBuilder()
 			.setGson(gson)
 			.object(new IObjectBuilder() {
 				
+				@Override
 				public void build(IObjectFacade object) {
 					object.put("foo", "bar");
 				}
 			})
 			.toJson();
 		// @formatter:on
-		
+
 		Assert.assertEquals(value1, value2);
-		
+
 		// @formatter:off
 		value1 = new JsonBuilder()
 			.setGson(gson)
@@ -425,12 +429,13 @@ public class TestBuilders extends TestCase {
 			.end()
 			.toJson();
 		// @formatter:on
-		
+
 		// @formatter:off
 		value2 = new JsonBuilder()
 			.setGson(gson)
 			.array(new IArrayBuilder() {
 				
+				@Override
 				public void build(IArrayFacade array) {
 					array.add("foo");
 					array.add("bar");
@@ -438,9 +443,9 @@ public class TestBuilders extends TestCase {
 			})
 			.toJson();
 		// @formatter:on
-		
+
 		Assert.assertEquals(value1, value2);
-		
+
 		// @formatter:off
 		value1 = new JsonBuilder()
 			.setGson(gson)
@@ -453,18 +458,21 @@ public class TestBuilders extends TestCase {
 			.end()
 			.toJson();
 		// @formatter:on
-		
+
 		// @formatter:off
 		value2 = new JsonBuilder()
 			.setGson(gson)
 			.array(new IArrayBuilder() {
 				
+				@Override
 				public void build(IArrayFacade array) {
 					array.addObject(new IObjectBuilder() {
 						
+						@Override
 						public void build(IObjectFacade object) {
 							object.putArray("foo", new IArrayBuilder() {
 								
+								@Override
 								public void build(IArrayFacade array) {
 									array.add("bar");
 								}
@@ -475,9 +483,9 @@ public class TestBuilders extends TestCase {
 			})
 			.toJson();
 		// @formatter:on
-		
+
 		Assert.assertEquals(value1, value2);
-		
+
 		// @formatter:off
 		value1 = new JsonBuilder(gson)
 			.object()
@@ -497,15 +505,17 @@ public class TestBuilders extends TestCase {
 			.end()
 			.toJson();
 		// @formatter:on
-		
+
 		// @formatter:off
 		value2 = new JsonBuilder()
 			.setGson(gson)
 			.object(new IObjectBuilder() {
 				
+				@Override
 				public void build(IObjectFacade root) {
 					root.putArray("texts", new IArrayBuilder() {
 						
+						@Override
 						public void build(IArrayFacade texts) {
 							texts.add("Welcome to the hotel");
 							texts.add("User %s!");
@@ -514,6 +524,7 @@ public class TestBuilders extends TestCase {
 					root.put("singleton", true);
 					root.putObject("configuration", new IObjectBuilder() {
 						
+						@Override
 						public void build(IObjectFacade configuration) {
 							configuration.put("ip", "127.0.0.1");
 							configuration.put("port", 1234);
@@ -527,9 +538,9 @@ public class TestBuilders extends TestCase {
 			})
 			.toJson();
 		// @formatter:on
-		
+
 		Assert.assertEquals(value1, value2);
-		
+
 		// @formatter:off
 		value1 = new JsonBuilder()
 			.setGson(gson)
@@ -540,13 +551,14 @@ public class TestBuilders extends TestCase {
 			.end()
 			.toJson();
 		// @formatter:on
-		
+
 		// @formatter:off
 		value2 = new JsonBuilder()
 			.setGson(gson)
 			.object()
 				.property("foo").object(new IObjectBuilder() {
 					
+					@Override
 					public void build(IObjectFacade object) {
 						object.put("bar", 1);
 					}
@@ -555,9 +567,9 @@ public class TestBuilders extends TestCase {
 			.end()
 			.toJson();
 		// @formatter:on
-		
+
 		Assert.assertEquals(value1, value2);
-		
+
 		// @formatter:off
 		value1 = new JsonBuilder()
 			.setGson(gson)
@@ -568,13 +580,14 @@ public class TestBuilders extends TestCase {
 			.end()
 			.toJson();
 		// @formatter:on
-		
+
 		// @formatter:off
 		value2 = new JsonBuilder()
 			.setGson(gson)
 			.array()
 				.array(new IArrayBuilder() {
 					
+					@Override
 					public void build(IArrayFacade array) {
 						array.add(1);
 					}
@@ -582,7 +595,144 @@ public class TestBuilders extends TestCase {
 			.end()
 			.toJson();
 		// @formatter:on
-		
+
+		Assert.assertEquals(value1, value2);
+	}
+
+	public void testJsonManual() {
+		// sync jsons for both generations
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+		String value1, value2;
+
+		// @formatter:off
+		value1 = new JsonBuilder()
+				.setGson(gson)
+				.object()
+					.property("configuration").object()
+						.property("allowedIP").array()
+							.string("127.0.0.1")
+							.string("::1")
+							.string("mydomain.com")
+						.end()
+						.property("login").string("root")
+						.property("password").string("password")
+						.property("settings").array()
+							.object()
+								.property("name").string("idle")
+								.property("max_download_window").number(10000)
+								.property("max_connection_timeout").number(30000)
+							.end()
+							.object()
+								.property("name").string("low")
+								.property("max_download_window").number(5000)
+								.property("max_connection_timeout").number(15000)
+							.end()
+							.object()
+								.property("name").string("high")
+								.property("max_download_window").number(2500)
+								.property("max_connection_timeout").number(10000)
+							.end()
+						.end()
+					.end()
+				.end()
+				.toJson();
+		// @formatter:on
+
+		JsonObject root = new JsonObject();
+		JsonObject configuration = new JsonObject();
+		root.add("configuration", configuration);
+		JsonArray allowedIp = new JsonArray();
+		configuration.add("allowedIP", allowedIp);
+		allowedIp.add(new JsonPrimitive("127.0.0.1"));
+		allowedIp.add(new JsonPrimitive("::1"));
+		allowedIp.add(new JsonPrimitive("mydomain.com"));
+		configuration.add("login", new JsonPrimitive("root"));
+		configuration.add("password", new JsonPrimitive("password"));
+		JsonArray settings = new JsonArray();
+		configuration.add("settings", settings);
+		JsonObject idle = new JsonObject();
+		settings.add(idle);
+		idle.add("name", new JsonPrimitive("idle"));
+		idle.add("max_download_window", new JsonPrimitive(10000));
+		idle.add("max_connection_timeout", new JsonPrimitive(30000));
+		JsonObject low = new JsonObject();
+		settings.add(low);
+		low.add("name", new JsonPrimitive("low"));
+		low.add("max_download_window", new JsonPrimitive(5000));
+		low.add("max_connection_timeout", new JsonPrimitive(15000));
+		JsonObject high = new JsonObject();
+		settings.add(high);
+		high.add("name", new JsonPrimitive("high"));
+		high.add("max_download_window", new JsonPrimitive(2500));
+		high.add("max_connection_timeout", new JsonPrimitive(10000));
+		value2 = gson.toJson(root);
+
+		Assert.assertEquals(value1, value2);
+	}
+
+	public void testBuildersInsertObjects() {
+		// remove pretty printing
+		Gson gson = new GsonBuilder().create();
+
+		final JsonElement inner = gson.fromJson("[1,2,3]", JsonArray.class);
+
+		String value;
+
+		// @formatter:off
+		value = new JsonBuilder()
+			.setGson(gson)
+			.object()
+				.property("myproperty").element(inner)
+			.end()
+			.toJson();
+		// @formatter:on
+
+		Assert.assertEquals("{\"myproperty\":[1,2,3]}", value);
+
+		// @formatter:off
+		value = new JsonBuilder()
+			.setGson(gson)
+			.object(new IObjectBuilder() {
+				
+				@Override
+				public void build(IObjectFacade object) {
+					object.put("myproperty", inner);
+				}
+			})
+			.toJson();
+		// @formatter:on
+
+		Assert.assertEquals("{\"myproperty\":[1,2,3]}", value);
+	}
+
+	public void testBuilderShortcuts() {
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+		String value1, value2;
+
+		// @formatter:off
+		value1 = new JsonBuilder()
+				.setGson(gson)
+				.object()
+					.property("foo").string("bar")
+					.property("baz").number(1)
+					.property("qux").bool(true)
+				.end()
+				.toJson();
+		// @formatter:on
+
+		// @formatter:off
+		value2 = new JsonBuilder()
+				.setGson(gson)
+				.object()
+					.string("foo", "bar")
+					.number("baz", 1)
+					.bool("qux", true)
+				.end()
+				.toJson();
+		// @formatter:on
+
 		Assert.assertEquals(value1, value2);
 	}
 }

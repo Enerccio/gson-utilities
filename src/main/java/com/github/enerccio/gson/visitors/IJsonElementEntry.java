@@ -1,27 +1,19 @@
 package com.github.enerccio.gson.visitors;
 
-import java.util.Collection;
-
-import com.github.enerccio.gson.tree.TreeInfo;
-
 /**
+ * Called when JSON element starts
+ * 
  * @author pvan
  * @since 1.1.0
  */
-public interface IJsonElementEntry {
-	
+public interface IJsonElementEntry extends IVisitorCallbackBase {
+
 	/**
-	 * Type of the element visited
-	 * @return
+	 * Skips the visiting of this element. No visitors will be called until
+	 * current element ends
+	 * 
 	 * @since 1.1.0
 	 */
-	public JsonElementType getType();
-	
-	/**
-	 * tree of properties/indexes of this element
-	 * @return 
-	 * @since 1.1.0
-	 */
-	public Collection<TreeInfo> getTree();
+	public void skip();
 
 }

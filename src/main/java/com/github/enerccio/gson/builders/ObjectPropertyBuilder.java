@@ -31,31 +31,36 @@ class ObjectPropertyBuilder extends BaseBuilder {
 		return new ArrayBuilder(this);
 	}
 
+	@Override
 	public ValueBuilder string(String value) {
 		setCurrentLevelElement(new JsonPrimitive(value));
 		return prevLevel;
 	}
 
+	@Override
 	public ValueBuilder number(Number value) {
 		setCurrentLevelElement(new JsonPrimitive(value));
 		return prevLevel;
 	}
 
+	@Override
 	public ValueBuilder bool(Boolean value) {
 		setCurrentLevelElement(new JsonPrimitive(value));
 		return prevLevel;
 	}
 
+	@Override
 	public ValueBuilder character(Character value) {
 		setCurrentLevelElement(new JsonPrimitive(value));
 		return prevLevel;
 	}
 
+	@Override
 	public ValueBuilder nil() {
 		setCurrentLevelElement(JsonNull.INSTANCE);
 		return prevLevel;
 	}
-	
+
 	@Override
 	public ValueBuilder object(IObjectBuilder builder) {
 		builder.build(new ObjectFacade(this));
@@ -69,6 +74,12 @@ class ObjectPropertyBuilder extends BaseBuilder {
 	}
 
 	@Override
+	public ValueBuilder element(JsonElement element) {
+		setCurrentLevelElement(element);
+		return prevLevel;
+	}
+
+	@Override
 	public String toJson() {
 		throw new IllegalStateException();
 	}
@@ -77,5 +88,4 @@ class ObjectPropertyBuilder extends BaseBuilder {
 	public JsonElement toJsonTree() {
 		throw new IllegalStateException();
 	}
-
 }

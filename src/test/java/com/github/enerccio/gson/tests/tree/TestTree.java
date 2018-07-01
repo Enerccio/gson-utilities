@@ -12,7 +12,7 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 public class TestTree extends TestCase {
-	
+
 	public TestTree(String testName) {
 		super(testName);
 	}
@@ -22,16 +22,16 @@ public class TestTree extends TestCase {
 	}
 
 	public void testMatcherCompilation() throws ParseException {
-		
+
 		@SuppressWarnings("unused")
 		JsonPatternMatcher matcher;
-		
+
 		matcher = new JsonPatternMatcher("foo");
 		matcher = new JsonPatternMatcher("foo.bar");
 		matcher = new JsonPatternMatcher("@2");
 		matcher = new JsonPatternMatcher("**.x");
 		matcher = new JsonPatternMatcher("foo.bar.baz.@1.*.x.**.z");
-		
+
 		try {
 			matcher = new JsonPatternMatcher(".x");
 			throw new AssertionError();
@@ -67,11 +67,11 @@ public class TestTree extends TestCase {
 			throw new AssertionError();
 		} catch (ParseException e) {
 			e.getMessage();
-		}		
+		}
 	}
-	
+
 	public void testMatchers() throws ParseException {
-		
+
 		TreeInfo[] nothing = new TreeInfo[0];
 		TreeInfo[] i0 = new TreeInfo[] { new TreeInfo(0) };
 		TreeInfo[] pfoo = new TreeInfo[] { new TreeInfo("foo") };
@@ -80,9 +80,9 @@ public class TestTree extends TestCase {
 		TreeInfo[] pfoopbar = new TreeInfo[] { new TreeInfo("foo"), new TreeInfo("bar") };
 		TreeInfo[] pfoopbarpqux = new TreeInfo[] { new TreeInfo("foo"), new TreeInfo("bar"), new TreeInfo("qux") };
 		TreeInfo[] pfoopqux = new TreeInfo[] { new TreeInfo("foo"), new TreeInfo("qux") };
-		
+
 		JsonPatternMatcher matcher;
-		
+
 		// test identity macher
 		matcher = new JsonPatternMatcher("");
 		testMatcher(matcher, true, nothing);
@@ -93,8 +93,8 @@ public class TestTree extends TestCase {
 		testMatcher(matcher, true, pfoopbar);
 		testMatcher(matcher, true, pfoopbarpqux);
 		testMatcher(matcher, true, pfoopqux);
-		
-		// simple property match		
+
+		// simple property match
 		matcher = new JsonPatternMatcher("foo");
 		testMatcher(matcher, false, nothing);
 		testMatcher(matcher, false, i0);
@@ -104,7 +104,7 @@ public class TestTree extends TestCase {
 		testMatcher(matcher, true, pfoopbar);
 		testMatcher(matcher, true, pfoopbarpqux);
 		testMatcher(matcher, true, pfoopqux);
-		
+
 		// simple index match
 		matcher = new JsonPatternMatcher("@0");
 		testMatcher(matcher, false, nothing);
@@ -115,7 +115,7 @@ public class TestTree extends TestCase {
 		testMatcher(matcher, false, pfoopbar);
 		testMatcher(matcher, false, pfoopbarpqux);
 		testMatcher(matcher, false, pfoopqux);
-		
+
 		// multi values
 		matcher = new JsonPatternMatcher("i0.abc");
 		testMatcher(matcher, false, nothing);
@@ -162,7 +162,7 @@ public class TestTree extends TestCase {
 		testMatcher(matcher, false, pfoopbar);
 		testMatcher(matcher, true, pfoopbarpqux);
 		testMatcher(matcher, false, pfoopqux);
-		
+
 		// test wildcards
 		matcher = new JsonPatternMatcher("foo.*");
 		testMatcher(matcher, false, nothing);
@@ -200,7 +200,7 @@ public class TestTree extends TestCase {
 		testMatcher(matcher, false, pfoopbar);
 		testMatcher(matcher, true, pfoopbarpqux);
 		testMatcher(matcher, false, pfoopqux);
-		
+
 		// multi wildcard
 		matcher = new JsonPatternMatcher("foo.**.qux");
 		testMatcher(matcher, false, nothing);

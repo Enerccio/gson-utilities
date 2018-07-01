@@ -36,31 +36,36 @@ class ArrayBuilder extends BaseBuilder {
 		return new ArrayBuilder(this);
 	}
 
+	@Override
 	public ValueBuilder string(String value) {
 		setCurrentLevelElement(new JsonPrimitive(value));
 		return this;
 	}
 
+	@Override
 	public ValueBuilder number(Number value) {
 		setCurrentLevelElement(new JsonPrimitive(value));
 		return this;
 	}
 
+	@Override
 	public ValueBuilder bool(Boolean value) {
 		setCurrentLevelElement(new JsonPrimitive(value));
 		return this;
 	}
 
+	@Override
 	public ValueBuilder character(Character value) {
 		setCurrentLevelElement(new JsonPrimitive(value));
 		return this;
 	}
 
+	@Override
 	public ValueBuilder nil() {
 		setCurrentLevelElement(JsonNull.INSTANCE);
 		return this;
 	}
-	
+
 	@Override
 	public ValueBuilder object(IObjectBuilder builder) {
 		builder.build(new ObjectFacade(this));
@@ -70,6 +75,12 @@ class ArrayBuilder extends BaseBuilder {
 	@Override
 	public ValueBuilder array(IArrayBuilder builder) {
 		builder.build(new ArrayFacade(this));
+		return this;
+	}
+
+	@Override
+	public ValueBuilder element(JsonElement element) {
+		setCurrentLevelElement(element);
 		return this;
 	}
 }
