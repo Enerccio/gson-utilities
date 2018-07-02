@@ -175,6 +175,29 @@ visitor.setListener(new IJsonVisitorListener() {
 visitor.visit(jsonString);
 ```
 
+#### JsonStreamVisitor
+
+Visits the JSON string stream like, ie JSON is not first deserialized then visited but it is being visited as it is being deserialized.
+
+Optionally can return deserialized JsonElement.
+
+#### Examples
+
+```java
+IJsonVisitor visitor = new JsonStreamVisitor();
+visitor.setListener(new IJsonVisitorListener() {
+	
+	public void onElementStart(IJsonElementEntry entry) {
+		// this is checked when element is about to be entered
+	}
+	
+	public void onElementEnd(IJsonElementExit exit) {
+		// This is checked when element is fully available
+	}
+});
+visitor.visit(jsonString);
+```
+
 For more available properties or visitors, see api doc.
 
 ### Json Tree Matcher
