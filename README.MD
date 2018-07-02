@@ -220,7 +220,7 @@ JsonElement e = JsonHelper.getFirst(value, "a.b.c.d");
 			"c": 
 			{ 
 				"d" : 4
-			}
+			},
 			"e":
 			{
 				"d" : "x"
