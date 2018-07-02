@@ -13,7 +13,7 @@ To use this library, simply add this to your maven dependencies:
 <dependency>
   <groupId>com.github.enerccio</groupId>
   <artifactId>gson-utilities</artifactId>
-  <version>1.0.1</version>
+  <version>1.1.0</version>
 </dependency>
 ```
 
