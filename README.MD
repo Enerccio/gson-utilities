@@ -152,7 +152,6 @@ In both cases the value will be:
 ### JSON Tree Visitors
 
 These visitors allows to visit each element of JSON in the JSON string.
-In version 1.1.0, only `JsonTreeVisitor` is available.
 
 #### JsonTreeVisitor
 
