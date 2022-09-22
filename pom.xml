@@ -63,6 +63,7 @@
 				<javadoc.opts>-Xdoclint:none</javadoc.opts>
 			</properties>
 		</profile>
+		<!--
 		<profile>
 			<id>release-sign-artifacts</id>
 			<activation>
@@ -92,6 +93,7 @@
 				</plugins>
 			</build>
 		</profile>
+		-->
 	</profiles>
 
 	<distributionManagement>
